@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="L2J_EngineMods" default="dist" basedir=".">
-	<eclipse.convertPath resourcepath="workspace_loc:/aCis_gameserver" property="aCis_gameserver.location" />
+
+	<property name="workspace" location="${ant.file}/../.." />
 	
 	<target name="dist" depends="jar">
 		<copy todir="build/dist">
@@ -49,11 +50,11 @@
 	</target>
 	
 	<path id="aCis_gameserver.classpath">
-		<pathelement location="${aCis_gameserver.location}/bin"/>
-		<pathelement location="${aCis_gameserver.location}/lib/c3p0-0.9.5-pre5.jar"/>
-		<pathelement location="${aCis_gameserver.location}/lib/mchange-commons-java-0.2.6.2.jar"/>
-		<pathelement location="${aCis_gameserver.location}/lib/mysql-connector-java-5.1.26.jar"/>
-		<pathelement location="${aCis_gameserver.location}/lib/L2J_EngineMods.jar"/>
+		<pathelement location="${workspace}/aCis_gameserver/bin"/>
+		<pathelement location="${workspace}/aCis_gameserver/lib/c3p0-0.9.5-pre5.jar"/>
+		<pathelement location="${workspace}/aCis_gameserver/lib/mchange-commons-java-0.2.6.2.jar"/>
+		<pathelement location="${workspace}/aCis_gameserver/lib/mysql-connector-java-5.1.26.jar"/>
+		<pathelement location="${workspace}/aCis_gameserver/lib/L2J_EngineMods.jar"/>
 	</path>
 
 	<path id="classpath">
