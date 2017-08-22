@@ -91,10 +91,28 @@ public class SystemAio extends AbstractMods
 			return;
 		}
 		
-		if (!player.isInsideZone(ZoneId.PEACE))
+		ThreadPool.schedule(() -> new CheckZone((Player) player), 3000);
+		
+	}
+	
+	private static class CheckZone implements Runnable
+	{
+		Player _player;
+		
+		public CheckZone(Player player)
 		{
-			player.teleToLocation(TeleportType.TOWN);
+			_player = player;
 		}
+		
+		@Override
+		public void run()
+		{
+			if (!_player.isInsideZone(ZoneId.PEACE))
+			{
+				_player.teleToLocation(TeleportType.TOWN);
+			}
+		}
+		
 	}
 	
 	@Override
