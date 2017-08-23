@@ -335,6 +335,16 @@ public class SystemVip extends AbstractMods
 			
 		}, dayTime - System.currentTimeMillis());
 		
+		if (ConfigData.ALLOW_VIP_NCOLOR)
+		{
+			player.getAppearance().setNameColor(ConfigData.VIP_NCOLOR);
+		}
+		
+		if (ConfigData.ALLOW_VIP_TCOLOR)
+		{
+			player.getAppearance().setTitleColor(ConfigData.VIP_TCOLOR);
+		}
+		
 		player.broadcastUserInfo();
 	}
 	

@@ -201,6 +201,11 @@ public class ConfigData
 	public static List<IntIntHolder> AIO_LIST_SKILLS = new ArrayList<>();
 	public static boolean AIO_SET_MAX_LVL;
 	public static int AIO_ITEM_ID;
+	
+	public static boolean ALLOW_AIO_NCOLOR;
+	public static int AIO_NCOLOR;
+	public static boolean ALLOW_AIO_TCOLOR;
+	public static int AIO_TCOLOR;
 	// VIP -------------------------------------------------------------------------------------------------------- //
 	public static Map<Stats, Double> VIP_STATS = new HashMap<>();
 	public static double VIP_BONUS_XP;
@@ -214,6 +219,11 @@ public class ConfigData
 	public static double VIP_BONUS_DROP_HERB_CHANCE;
 	public static double VIP_BONUS_DROP_SPOIL_CHANCE;
 	public static double VIP_BONUS_DROP_SEED_CHANCE;
+	
+	public static boolean ALLOW_VIP_NCOLOR;
+	public static int VIP_NCOLOR;
+	public static boolean ALLOW_VIP_TCOLOR;
+	public static int VIP_TCOLOR;
 	
 	public static void load()
 	{
@@ -310,6 +320,11 @@ public class ConfigData
 		VIP_BONUS_DROP_HERB_CHANCE = config.getProperty("VipBonusDropChanceHerb", 1.0);
 		VIP_BONUS_DROP_SPOIL_CHANCE = config.getProperty("VipBonusDropChanceSpoil", 1.0);
 		VIP_BONUS_DROP_SEED_CHANCE = config.getProperty("VipBonusDropChanceSeed", 1.0);
+		
+		ALLOW_VIP_NCOLOR = config.getProperty("AllowVipNameColor", false);
+		VIP_NCOLOR = Integer.decode("0x" + config.getProperty("VipNameColor", "88AA88"));
+		ALLOW_VIP_TCOLOR = config.getProperty("AllowVipTitleColor", false);
+		VIP_TCOLOR = Integer.decode("0x" + config.getProperty("VipTitleColor", "88AA88"));
 	}
 	
 	private static void loadAio()
@@ -322,6 +337,11 @@ public class ConfigData
 		AIO_LIST_SKILLS = parseBuff(config, "AioSkills");
 		AIO_SET_MAX_LVL = config.getProperty("AioSetMaxLevel", false);
 		AIO_ITEM_ID = config.getProperty("AioItemId", 8207);
+		
+		ALLOW_AIO_NCOLOR = config.getProperty("AllowAioNameColor", false);
+		AIO_NCOLOR = Integer.decode("0x" + config.getProperty("AioNameColor", "88AA88"));
+		ALLOW_AIO_TCOLOR = config.getProperty("AllowAioTitleColor", false);
+		AIO_TCOLOR = Integer.decode("0x" + config.getProperty("AioTitleColor", "88AA88"));
 	}
 	
 	private static void loadNewCharacter()

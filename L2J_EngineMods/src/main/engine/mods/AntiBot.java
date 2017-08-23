@@ -187,31 +187,31 @@ public class AntiBot extends AbstractMods
 		hb.append(Html.headHtml("ANTI BOT"));
 		hb.append("<br>");
 		hb.append("has ", PlayerData.get(activeChar).getAttempts(), " attemps!<br>");
-		// for clarity of the images could only come out a rnd of these values
+		// For clarity of the images could only come out a rnd of these values
 		List<Integer> aux = Arrays.asList(0, 1, 3, 4, 5);
 		
 		ItemIconType itemIconType1 = ItemIconType.values()[aux.get(Rnd.get(aux.size()))];
-		// we get a different type
+		// Get a different type
 		ItemIconType itemIconType2 = ItemIconType.values()[aux.get(Rnd.get(aux.size()))];
 		
-		// we ensure that both randoms are different
+		// Ensure that both random are different
 		while (itemIconType1 == itemIconType2)
 		{
 			itemIconType2 = ItemIconType.values()[aux.get(Rnd.get(aux.size()))];
 		}
 		
-		// we inform the type of item you have to look
+		// Inform the type of item you have to look
 		hb.append("It indicates which of these items is: <font color=\"LEVEL\">", itemIconType1.name().toLowerCase(), "</font><br>");
 		
 		hb.append("<table>");
 		hb.append("<tr>");
-		// we generate a random column where will the correct answer.
-		int rnd = Rnd.get(0, 4);
+		// Generate a random column where will the correct answer.
+		int rnd = Rnd.get(0, 3);
 		PlayerData.get(activeChar).setAnswerRight(rnd + "");
 		
-		for (int i = 0; i < 4; i++)
+		for (int i = 0; i <= 3; i++)
 		{
-			// generate randoms icons.
+			// Generate random icons.
 			String icon = "";
 			if (i == rnd)
 			{

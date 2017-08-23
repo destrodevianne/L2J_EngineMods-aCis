@@ -361,6 +361,17 @@ public class SystemAio extends AbstractMods
 		{
 			player.addSkill(bh.getSkill(), false);
 		}
+		
+		if (ConfigData.ALLOW_AIO_NCOLOR)
+		{
+			player.getAppearance().setNameColor(ConfigData.AIO_NCOLOR);
+		}
+		
+		if (ConfigData.ALLOW_AIO_TCOLOR)
+		{
+			player.getAppearance().setTitleColor(ConfigData.AIO_TCOLOR);
+		}
+		
 		player.broadcastUserInfo();
 	}
 	
