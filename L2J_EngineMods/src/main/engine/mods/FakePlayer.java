@@ -100,7 +100,8 @@ public class FakePlayer extends AbstractMods
 	
 	public FakePlayer()
 	{
-		registerMod(ConfigData.ENABLE_fakePlayers);
+		// Desabilitado hasta q estemos seguro de q funcione correctamente
+		// registerMod(ConfigData.ENABLE_fakePlayers);
 	}
 	
 	@Override
