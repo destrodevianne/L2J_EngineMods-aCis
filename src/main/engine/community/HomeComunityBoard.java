@@ -22,7 +22,9 @@ import main.holders.RewardHolder;
 import main.util.builders.html.Html;
 import main.util.builders.html.HtmlBuilder;
 import main.util.builders.html.HtmlBuilder.HtmlType;
+import main.util.builders.html.L2UI;
 import main.util.builders.html.L2UI_CH3;
+import net.sf.l2j.Config;
 import net.sf.l2j.gameserver.data.ItemTable;
 import net.sf.l2j.gameserver.model.actor.instance.Player;
 import net.sf.l2j.gameserver.model.base.Experience;
@@ -85,6 +87,8 @@ public class HomeComunityBoard extends AbstractMods
 					hb.append(gameTableMode("Rebirth", true));
 					hb.append(gameTableMode("Aio", true));
 					hb.append(gameTableMode("Vip", true));
+					hb.append(gameTableMode("enchant", true));
+					hb.append(gameTableMode("rates", true));
 					hb.append(gameTableMode("VoteReward", ConfigData.ENABLE_VoteReward));
 					hb.append(gameTableMode("Enchant Abnormal Effect", ConfigData.ENABLE_EnchantAbnormalEffectArmor));
 					hb.append(gameTableMode("Title And Name Color", ConfigData.ENABLE_ColorAccordingAmountPvPorPk));
@@ -114,6 +118,14 @@ public class HomeComunityBoard extends AbstractMods
 						
 						case "Vip":
 							hb.append(infoVip());
+							break;
+						
+						case "rates":
+							hb.append(infoRates());
+							break;
+						
+						case "enchant":
+							hb.append(infoEnchant());
 							break;
 						
 						case "VoteReward":
@@ -409,17 +421,17 @@ public class HomeComunityBoard extends AbstractMods
 		hb.append("<tr>");
 		hb.append("<td>");
 		
-		hb.append(Html.newImage("L2UI.SquareGray", 204, 1));
+		hb.append(Html.newImage(L2UI.SquareGray, 204, 1));
 		hb.append("<table fixwidth=204 border=0 cellspacing=0 cellpadding=0 bgcolor=CC99FF>");
 		hb.append("<tr>");
-		hb.append("<td align=center fixwidth=104><button value=\"PvP\" action=\"\" width=104 height=19 back=L2UI_CH3.amountbox2 fore=L2UI_CH3.amountbox2></td>");
-		hb.append("<td align=center fixwidth=100><button value=\"Color\" action=\"\" width=100 height=19 back=L2UI_CH3.amountbox2 fore=L2UI_CH3.amountbox2></td>");
+		hb.append("<td align=center fixwidth=104><button value=\"PvP\" width=104 height=19 back=L2UI_CH3.amountbox2 fore=L2UI_CH3.amountbox2></td>");
+		hb.append("<td align=center fixwidth=100><button value=\"Color\" width=100 height=19 back=L2UI_CH3.amountbox2 fore=L2UI_CH3.amountbox2></td>");
 		hb.append("</tr>");
 		hb.append("</table>");
 		
 		for (Entry<Integer, String> pvp : ConfigData.PVP_COLOR_NAME.entrySet())
 		{
-			hb.append(Html.newImage("L2UI.SquareGray", 204, 1));
+			hb.append(Html.newImage(L2UI.SquareGray, 204, 1));
 			hb.append("<table fixwidth=204 border=0 cellspacing=0 cellpadding=0>");
 			hb.append("<tr>");
 			hb.append("<td align=center fixwidth=104>", pvp.getKey(), "</td>");
@@ -428,16 +440,16 @@ public class HomeComunityBoard extends AbstractMods
 			hb.append("</table>");
 		}
 		
-		hb.append(Html.newImage("L2UI.SquareGray", 204, 1));
+		hb.append(Html.newImage(L2UI.SquareGray, 204, 1));
 		hb.append("<table fixwidth=204 border=0 cellspacing=0 cellpadding=0 bgcolor=CC99FF>");
 		hb.append("<tr>");
-		hb.append("<td align=center fixwidth=104><button value=\"Pk\" action=\"\" width=104 height=19 back=L2UI_CH3.amountbox2 fore=L2UI_CH3.amountbox2></td>");
-		hb.append("<td align=center fixwidth=100><button value=\"color\" action=\"\" width=100 height=19 back=L2UI_CH3.amountbox2 fore=L2UI_CH3.amountbox2></td>");
+		hb.append("<td align=center fixwidth=104><button value=\"Pk\" width=104 height=19 back=L2UI_CH3.amountbox2 fore=L2UI_CH3.amountbox2></td>");
+		hb.append("<td align=center fixwidth=100><button value=\"color\" width=100 height=19 back=L2UI_CH3.amountbox2 fore=L2UI_CH3.amountbox2></td>");
 		hb.append("</tr>");
 		hb.append("</table>");
 		for (Entry<Integer, String> pk : ConfigData.PK_COLOR_TITLE.entrySet())
 		{
-			hb.append(Html.newImage("L2UI.SquareGray", 204, 1));
+			hb.append(Html.newImage(L2UI.SquareGray, 204, 1));
 			hb.append("<table fixwidth=204 border=0 cellspacing=0 cellpadding=0>");
 			hb.append("<tr>");
 			hb.append("<td align=center fixwidth=104>", pk.getKey(), "</td>");
@@ -446,7 +458,7 @@ public class HomeComunityBoard extends AbstractMods
 			hb.append("</table>");
 		}
 		
-		hb.append(Html.newImage("L2UI.SquareGray", 204, 1));
+		hb.append(Html.newImage(L2UI.SquareGray, 204, 1));
 		
 		hb.append("</td>");
 		hb.append("</tr>");
@@ -470,14 +482,14 @@ public class HomeComunityBoard extends AbstractMods
 		
 		for (Entry<Integer, RewardHolder> entry : ConfigData.VOTE_REWARDS.entrySet())
 		{
-			hb.append(Html.newImage("L2UI.SquareGray", 204, 1));
+			hb.append(Html.newImage(L2UI.SquareGray, 204, 1));
 			int voteCount = entry.getKey();
 			RewardHolder reward = entry.getValue();
 			
 			hb.append(Html.newFontColor("LEVEL", "Votos"), ": ", voteCount, "<br1>");
 			hb.append(Html.newFontColor("LEVEL", "Premios"), ": ", ItemTable.getInstance().getTemplate(reward.getRewardId()).getName(), " - ", reward.getRewardCount(), "<br1>");
 		}
-		hb.append(Html.newImage("L2UI.SquareGray", 204, 1));
+		hb.append(Html.newImage(L2UI.SquareGray, 204, 1));
 		hb.append("</td>");
 		hb.append("</tr>");
 		hb.append("</table>");
@@ -514,40 +526,40 @@ public class HomeComunityBoard extends AbstractMods
 		hb.append("capacidades ", Html.newFontColor("LEVEL", "extraordinarias"), "<br1>");
 		hb.append("aqui les dejo los detalles<br1>");
 		
-		hb.append(Html.newImage("L2UI.SquareGray", 204, 1));
+		hb.append(Html.newImage(L2UI.SquareGray, 204, 1));
 		hb.append("<table fixwidth=204 border=0 cellspacing=0 cellpadding=0 bgcolor=CC99FF>");
 		hb.append("<tr>");
-		hb.append("<td fixwidth=100 align=center><button value=\"Type\" action=\"\" width=100 height=19 back=L2UI_CH3.amountbox2 fore=L2UI_CH3.amountbox2></td>");
-		hb.append("<td fixwidth=104 align=center><button value=\"Bonus\" action=\"\" width=104 height=19 back=L2UI_CH3.amountbox2 fore=L2UI_CH3.amountbox2></td>");
+		hb.append("<td fixwidth=100 align=center><button value=\"Type\" width=100 height=19 back=L2UI_CH3.amountbox2 fore=L2UI_CH3.amountbox2></td>");
+		hb.append("<td fixwidth=104 align=center><button value=\"Bonus\" width=104 height=19 back=L2UI_CH3.amountbox2 fore=L2UI_CH3.amountbox2></td>");
 		hb.append("</tr>");
 		hb.append("</table>");
-		hb.append(Html.newImage("L2UI.SquareGray", 204, 1));
+		hb.append(Html.newImage(L2UI.SquareGray, 204, 1));
 		hb.append("<table fixwidth=204 border=0 cellspacing=0 cellpadding=0>");
 		hb.append("<tr>");
 		hb.append("<td fixwidth=100 align=center><font color=3366FF>EXP:</font></td>");
 		hb.append("<td fixwidth=104 align=center><font color=LEVEL>", (int) ConfigData.VIP_BONUS_XP + 100, "%</font></td>");
 		hb.append("</tr>");
 		hb.append("</table>");
-		hb.append(Html.newImage("L2UI.SquareGray", 204, 1));
+		hb.append(Html.newImage(L2UI.SquareGray, 204, 1));
 		hb.append("<table fixwidth=204 border=0 cellspacing=0 cellpadding=0>");
 		hb.append("<tr>");
 		hb.append("<td fixwidth=100 align=center><font color=3366FF>SP:</font></td>");
 		hb.append("<td fixwidth=104 align=center><font color=LEVEL>", (int) ConfigData.VIP_BONUS_SP + 100, "%</font></td>");
 		hb.append("</tr>");
 		hb.append("</table>");
-		hb.append(Html.newImage("L2UI.SquareGray", 204, 1));
+		hb.append(Html.newImage(L2UI.SquareGray, 204, 1));
 		
 		hb.append("<br><br><font color=LEVEL>The VIP have drop rate:</font><br>");
 		
-		hb.append(Html.newImage("L2UI.SquareGray", 204, 1));
+		hb.append(Html.newImage(L2UI.SquareGray, 204, 1));
 		hb.append("<table fixwidth=204 border=0 cellspacing=0 cellpadding=0 bgcolor=CC99FF>");
 		hb.append("<tr>");
-		hb.append("<td fixwidth=100><button value=\"Bonus\" action=\"\" width=100 height=19 back=L2UI_CH3.amountbox2 fore=L2UI_CH3.amountbox2></td>");
-		hb.append("<td fixwidth=52><button value=\"Amount\" action=\"\" width=52 height=19 back=L2UI_CH3.amountbox2 fore=L2UI_CH3.amountbox2></td>");
-		hb.append("<td fixwidth=52><button value=\"Chance\" action=\"\" width=52 height=19 back=L2UI_CH3.amountbox2 fore=L2UI_CH3.amountbox2></td>");
+		hb.append("<td fixwidth=100><button value=\"Bonus\" width=100 height=19 back=L2UI_CH3.amountbox2 fore=L2UI_CH3.amountbox2></td>");
+		hb.append("<td fixwidth=52><button value=\"Amount\" width=52 height=19 back=L2UI_CH3.amountbox2 fore=L2UI_CH3.amountbox2></td>");
+		hb.append("<td fixwidth=52><button value=\"Chance\" width=52 height=19 back=L2UI_CH3.amountbox2 fore=L2UI_CH3.amountbox2></td>");
 		hb.append("</tr>");
 		hb.append("</table>");
-		hb.append(Html.newImage("L2UI.SquareGray", 204, 1));
+		hb.append(Html.newImage(L2UI.SquareGray, 204, 1));
 		hb.append("<table fixwidth=204 border=0 cellspacing=0 cellpadding=0>");
 		hb.append("<tr>");
 		hb.append("<td fixwidth=100 align=center><font color=3366FF>Normal:</font></td>");
@@ -555,7 +567,7 @@ public class HomeComunityBoard extends AbstractMods
 		hb.append("<td fixwidth=52 align=center><font color=LEVEL>", (int) ConfigData.VIP_BONUS_DROP_NORMAL_AMOUNT + 100, "%</font></td>");
 		hb.append("</tr>");
 		hb.append("</table>");
-		hb.append(Html.newImage("L2UI.SquareGray", 204, 1));
+		hb.append(Html.newImage(L2UI.SquareGray, 204, 1));
 		hb.append("<table fixwidth=204 border=0 cellspacing=0 cellpadding=0>");
 		hb.append("<tr>");
 		hb.append("<td fixwidth=100 align=center><font color=3366FF>Spoil:</font></td>");
@@ -563,7 +575,7 @@ public class HomeComunityBoard extends AbstractMods
 		hb.append("<td fixwidth=52 align=center><font color=LEVEL>", (int) ConfigData.VIP_BONUS_DROP_SPOIL_CHANCE + 100, "%</font></td>");
 		hb.append("</tr>");
 		hb.append("</table>");
-		hb.append(Html.newImage("L2UI.SquareGray", 204, 1));
+		hb.append(Html.newImage(L2UI.SquareGray, 204, 1));
 		hb.append("<table fixwidth=204 border=0 cellspacing=0 cellpadding=0>");
 		hb.append("<tr>");
 		hb.append("<td fixwidth=100 align=center><font color=3366FF>Seed:</font></td>");
@@ -571,7 +583,7 @@ public class HomeComunityBoard extends AbstractMods
 		hb.append("<td fixwidth=52 align=center><font color=LEVEL>", (int) ConfigData.VIP_BONUS_DROP_SEED_AMOUNT + 100, "%</font></td>");
 		hb.append("</tr>");
 		hb.append("</table>");
-		hb.append(Html.newImage("L2UI.SquareGray", 204, 1));
+		hb.append(Html.newImage(L2UI.SquareGray, 204, 1));
 		hb.append("<table fixwidth=204 border=0 cellspacing=0 cellpadding=0>");
 		hb.append("<tr>");
 		hb.append("<td fixwidth=100 align=center><font color=3366FF>Herb:</font></td>");
@@ -579,7 +591,139 @@ public class HomeComunityBoard extends AbstractMods
 		hb.append("<td fixwidth=52 align=center><font color=LEVEL>", (int) ConfigData.VIP_BONUS_DROP_HERB_AMOUNT + 100, "%</font></td>");
 		hb.append("</tr>");
 		hb.append("</table>");
-		hb.append(Html.newImage("L2UI.SquareGray", 204, 1));
+		hb.append(Html.newImage(L2UI.SquareGray, 204, 1));
+		return hb.toString();
+	}
+	
+	private static String infoEnchant()
+	{
+		HtmlBuilder hb = new HtmlBuilder(HtmlType.HTML_TYPE);
+		
+		hb.append("Enchant ", Html.newFontColor("LEVEL", "Info"), "<br1>");
+		hb.append("<font color=LEVEL></font><br><br>");
+		hb.append(Html.newImage(L2UI.SquareGray, 204, 1));
+		hb.append("<table fixwidth=204 border=0 cellspacing=0 cellpadding=0 bgcolor=CC99FF>");
+		hb.append("<tr>");
+		hb.append("<td fixwidth=100 align=center><button value=\"Type\" width=100 height=19 back=L2UI_CH3.amountbox2 fore=L2UI_CH3.amountbox2></td>");
+		hb.append("<td fixwidth=104 align=center><button value=\"Status\" width=104 height=19 back=L2UI_CH3.amountbox2 fore=L2UI_CH3.amountbox2></td>");
+		hb.append("</tr>");
+		hb.append("</table>");
+		hb.append(Html.newImage(L2UI.SquareGray, 204, 1));
+		hb.append("<table fixwidth=204 border=0 cellspacing=0 cellpadding=0>");
+		hb.append("<tr>");
+		hb.append("<td fixwidth=100 align=center><font color=3366FF>Max:</font></td>");
+		hb.append("<td fixwidth=104 align=center><font color=LEVEL>", Config.ENCHANT_SAFE_MAX_FULL, "</font></td>");
+		hb.append("</tr>");
+		hb.append("</table>");
+		hb.append(Html.newImage(L2UI.SquareGray, 204, 1));
+		hb.append("<table fixwidth=204 border=0 cellspacing=0 cellpadding=0>");
+		hb.append("<tr>");
+		hb.append("<td fixwidth=100 align=center><font color=3366FF>Safe:</font></td>");
+		hb.append("<td fixwidth=104 align=center><font color=LEVEL>", Config.ENCHANT_SAFE_MAX, "</font></td>");
+		hb.append("</tr>");
+		hb.append("</table>");
+		hb.append(Html.newImage(L2UI.SquareGray, 204, 1));
+		
+		hb.append("<br><br><font color=LEVEL>Type/Min%/Max%</font><br>");
+		hb.append("<font color=LEVEL></font><br><br>");
+		
+		hb.append(Html.newImage(L2UI.SquareGray, 204, 1));
+		hb.append("<table fixwidth=204 border=0 cellspacing=0 cellpadding=0 bgcolor=CC99FF>");
+		hb.append("<tr>");
+		hb.append("<td fixwidth=100><button value=\"Type\" width=100 height=19 back=L2UI_CH3.amountbox2 fore=L2UI_CH3.amountbox2></td>");
+		hb.append("<td fixwidth=52><button value=\"Min \" width=52 height=19 back=L2UI_CH3.amountbox2 fore=L2UI_CH3.amountbox2></td>");
+		hb.append("<td fixwidth=52><button value=\"Max\" width=52 height=19 back=L2UI_CH3.amountbox2 fore=L2UI_CH3.amountbox2></td>");
+		hb.append("</tr>");
+		hb.append("</table>");
+		hb.append(Html.newImage(L2UI.SquareGray, 204, 1));
+		hb.append("<table fixwidth=204 border=0 cellspacing=0 cellpadding=0>");
+		hb.append("<tr>");
+		hb.append("<td fixwidth=100 align=center><font color=3366FF>Normal:</font></td>");
+		hb.append("<td fixwidth=52 align=center><font color=LEVEL>", 45, "%</font></td>");
+		hb.append("<td fixwidth=52 align=center><font color=LEVEL>", 75, "%</font></td>");
+		hb.append("</tr>");
+		hb.append("</table>");
+		hb.append(Html.newImage(L2UI.SquareGray, 204, 1));
+		hb.append("<table fixwidth=204 border=0 cellspacing=0 cellpadding=0>");
+		hb.append("<tr>");
+		hb.append("<td fixwidth=100 align=center><font color=3366FF>Bless:</font></td>");
+		hb.append("<td fixwidth=52 align=center><font color=LEVEL>", 75, "%</font></td>");
+		hb.append("<td fixwidth=52 align=center><font color=LEVEL>", 85, "%</font></td>");
+		hb.append("</tr>");
+		hb.append("</table>");
+		hb.append(Html.newImage(L2UI.SquareGray, 204, 1));
+		hb.append("<table fixwidth=204 border=0 cellspacing=0 cellpadding=0>");
+		hb.append("<tr>");
+		hb.append("<td fixwidth=100 align=center><font color=3366FF>Crytal:</font></td>");
+		hb.append("<td fixwidth=52 align=center><font color=LEVEL>", 85, "%</font></td>");
+		hb.append("<td fixwidth=52 align=center><font color=LEVEL>", 100, "%</font></td>");
+		hb.append("</tr>");
+		hb.append("</table>");
+		hb.append(Html.newImage(L2UI.SquareGray, 204, 1));
+		return hb.toString();
+	}
+	
+	private static String infoRates()
+	{
+		HtmlBuilder hb = new HtmlBuilder(HtmlType.HTML_TYPE);
+		
+		hb.append("Info ", Html.newFontColor("LEVEL", "Rates"), "<br1>");
+		hb.append("<br><br><font color=LEVEL></font><br>");
+		
+		hb.append(Html.newImage(L2UI.SquareGray, 204, 1));
+		hb.append("<table fixwidth=204 border=0 cellspacing=0 cellpadding=0 bgcolor=CC99FF>");
+		hb.append("<tr>");
+		hb.append("<td fixwidth=100 align=center><button value=\"Type\" width=100 height=19 back=L2UI_CH3.amountbox2 fore=L2UI_CH3.amountbox2></td>");
+		hb.append("<td fixwidth=104 align=center><button value=\"Chance\" width=104 height=19 back=L2UI_CH3.amountbox2 fore=L2UI_CH3.amountbox2></td>");
+		hb.append("</tr>");
+		hb.append("</table>");
+		hb.append(Html.newImage(L2UI.SquareGray, 204, 1));
+		hb.append("<table fixwidth=204 border=0 cellspacing=0 cellpadding=0>");
+		hb.append("<tr>");
+		hb.append("<td fixwidth=100 align=center><font color=3366FF>EXP:</font></td>");
+		hb.append("<td fixwidth=104 align=center><font color=LEVEL>", Config.RATE_XP, "%</font></td>");
+		hb.append("</tr>");
+		hb.append("</table>");
+		hb.append(Html.newImage(L2UI.SquareGray, 204, 1));
+		hb.append("<table fixwidth=204 border=0 cellspacing=0 cellpadding=0>");
+		hb.append("<tr>");
+		hb.append("<td fixwidth=100 align=center><font color=3366FF>SP:</font></td>");
+		hb.append("<td fixwidth=104 align=center><font color=LEVEL>", Config.RATE_SP, "%</font></td>");
+		hb.append("</tr>");
+		hb.append("</table>");
+		hb.append(Html.newImage(L2UI.SquareGray, 204, 1));
+		
+		hb.append("Others ", Html.newFontColor("LEVEL", "Rates"), "<br1>");
+		hb.append("<br><br><font color=LEVEL></font><br>");
+		hb.append("<table fixwidth=204 border=0 cellspacing=0 cellpadding=0 bgcolor=CC99FF>");
+		hb.append("<tr>");
+		hb.append("<td fixwidth=100 align=center><button value=\"Type\" width=100 height=19 back=L2UI_CH3.amountbox2 fore=L2UI_CH3.amountbox2></td>");
+		hb.append("<td fixwidth=104 align=center><button value=\"Status\" width=104 height=19 back=L2UI_CH3.amountbox2 fore=L2UI_CH3.amountbox2></td>");
+		hb.append("</tr>");
+		hb.append("</table>");
+		hb.append(Html.newImage(L2UI.SquareGray, 204, 1));
+		
+		hb.append("<table fixwidth=204 border=0 cellspacing=0 cellpadding=0>");
+		hb.append("<tr>");
+		hb.append("<td fixwidth=100 align=center><font color=3366FF>Adena:</font></td>");
+		hb.append("<td fixwidth=104 align=center><font color=LEVEL>", Config.RATE_DROP_ADENA, "%</font></td>");
+		hb.append("</tr>");
+		hb.append("</table>");
+		hb.append(Html.newImage(L2UI.SquareGray, 204, 1));
+		hb.append("<table fixwidth=204 border=0 cellspacing=0 cellpadding=0>");
+		hb.append("<tr>");
+		hb.append("<td fixwidth=100 align=center><font color=3366FF>Drop:</font></td>");
+		hb.append("<td fixwidth=104 align=center><font color=LEVEL>", Config.RATE_DROP_ITEMS, "%</font></td>");
+		hb.append("</tr>");
+		hb.append("</table>");
+		hb.append(Html.newImage(L2UI.SquareGray, 204, 1));
+		hb.append("<table fixwidth=204 border=0 cellspacing=0 cellpadding=0>");
+		hb.append("<tr>");
+		hb.append("<td fixwidth=100 align=center><font color=3366FF>Spoil:</font></td>");
+		hb.append("<td fixwidth=104 align=center><font color=LEVEL>", Config.RATE_DROP_SPOIL, "%</font></td>");
+		hb.append("</tr>");
+		hb.append("</table>");
+		hb.append(Html.newImage(L2UI.SquareGray, 204, 1));
 		return hb.toString();
 	}
 }
