@@ -100,11 +100,14 @@ public class HomeComunityBoard extends AbstractMods
 					hb.append(gameTableMode("Offline Shop", ConfigData.OFFLINE_TRADE_ENABLE || ConfigData.OFFLINE_SELLBUFF_ENABLE));
 					hb.append("</td>");
 					
-					String opc = st.hasMoreTokens() ? st.nextToken() : "Aio";
+					String opc = st.hasMoreTokens() ? st.nextToken() : "Rebirth";
 					
-					hb.append("<td fixwidth=204>");
-					
+					hb.append("<td fixwidth=204 height=200>");
 					hb.append(getTopInfo(opc));
+					
+					hb.append("<table width=204 border=0 cellspacing=0 cellpadding=0>");
+					hb.append("<tr>");
+					hb.append("<td>");
 					
 					switch (opc)
 					{
@@ -156,6 +159,10 @@ public class HomeComunityBoard extends AbstractMods
 							hb.append(infoOfflineShop());
 							break;
 					}
+					
+					hb.append("</td>");
+					hb.append("</tr>");
+					hb.append("</table>");
 					hb.append("</td>");
 					
 					hb.append("</tr>");
@@ -290,9 +297,6 @@ public class HomeComunityBoard extends AbstractMods
 	private static String infoRebirth()
 	{
 		HtmlBuilder hb = new HtmlBuilder(HtmlType.HTML_TYPE);
-		hb.append("<table fixwidth=204 border=0 cellspacing=0 cellpadding=0>");
-		hb.append("<tr>");
-		hb.append("<td>");
 		hb.append("<br>");
 		hb.append("<center>");
 		hb.append("Al llegar al level ", Html.newFontColor("LEVEL", Experience.MAX_LEVEL - 1), "<br1>");
@@ -303,19 +307,12 @@ public class HomeComunityBoard extends AbstractMods
 		hb.append("un ", Html.newFontColor("LEVEL", "Dios!"), "<br1>");
 		hb.append("Tu mision comienza con APOLO<br1>");
 		hb.append("</center>");
-		
-		hb.append("</td>");
-		hb.append("</tr>");
-		hb.append("</table>");
 		return hb.toString();
 	}
 	
 	private static String infoOfflineShop()
 	{
 		HtmlBuilder hb = new HtmlBuilder(HtmlType.HTML_TYPE);
-		hb.append("<table fixwidth=204 border=0 cellspacing=0 cellpadding=0>");
-		hb.append("<tr>");
-		hb.append("<td>");
 		hb.append("<br>");
 		hb.append("<center>");
 		hb.append("Podran dejar sus personajes<br1>");
@@ -323,38 +320,24 @@ public class HomeComunityBoard extends AbstractMods
 		hb.append("offline, esto tambien incluye<br1>");
 		hb.append("al sistema sellbuff<br1>");
 		hb.append("</center>");
-		
-		hb.append("</td>");
-		hb.append("</tr>");
-		hb.append("</table>");
 		return hb.toString();
 	}
 	
 	private static String infoAntiBot()
 	{
 		HtmlBuilder hb = new HtmlBuilder(HtmlType.HTML_TYPE);
-		hb.append("<table fixwidth=204 border=0 cellspacing=0 cellpadding=0>");
-		hb.append("<tr>");
-		hb.append("<td>");
 		hb.append("<br>");
 		hb.append("<center>");
 		hb.append("Sistema para controlar<br1>");
 		hb.append("que no esten usando programas<br1>");
 		hb.append("externos que lo ayuden a levelear<br1>");
 		hb.append("</center>");
-		
-		hb.append("</td>");
-		hb.append("</tr>");
-		hb.append("</table>");
 		return hb.toString();
 	}
 	
 	private static String infoSellBuff()
 	{
 		HtmlBuilder hb = new HtmlBuilder(HtmlType.HTML_TYPE);
-		hb.append("<table fixwidth=204 border=0 cellspacing=0 cellpadding=0>");
-		hb.append("<tr>");
-		hb.append("<td>");
 		hb.append("<br>");
 		hb.append("<center>");
 		hb.append("Podran dejar a sus personajes<br1>");
@@ -366,19 +349,12 @@ public class HomeComunityBoard extends AbstractMods
 		hb.append("Si se desconectan sus pjs seguiran<br1>");
 		hb.append("en el juego en modo offline<br1>");
 		hb.append("</center>");
-		
-		hb.append("</td>");
-		hb.append("</tr>");
-		hb.append("</table>");
 		return hb.toString();
 	}
 	
 	private static String infoSpreeKills()
 	{
 		HtmlBuilder hb = new HtmlBuilder(HtmlType.HTML_TYPE);
-		hb.append("<table fixwidth=204 border=0 cellspacing=0 cellpadding=0>");
-		hb.append("<tr>");
-		hb.append("<td>");
 		hb.append("<br>");
 		hb.append("<center>");
 		hb.append("Cada ves que maten a un oponente<br1>");
@@ -387,19 +363,12 @@ public class HomeComunityBoard extends AbstractMods
 		hb.append("cada victoria consecutiva<br1>");
 		hb.append("el mensaje y el sonido seran diferentes<br1>");
 		hb.append("</center>");
-		
-		hb.append("</td>");
-		hb.append("</tr>");
-		hb.append("</table>");
 		return hb.toString();
 	}
 	
 	private static String infoEnchantAbnormalEffect()
 	{
 		HtmlBuilder hb = new HtmlBuilder(HtmlType.HTML_TYPE);
-		hb.append("<table fixwidth=204 border=0 cellspacing=0 cellpadding=0>");
-		hb.append("<tr>");
-		hb.append("<td>");
 		hb.append("<br>");
 		hb.append("<center>");
 		hb.append("En el momento en que tengan<br1>");
@@ -407,22 +376,14 @@ public class HomeComunityBoard extends AbstractMods
 		hb.append("+", Html.newFontColor("LEVEL", ConfigData.ENCHANT_EFFECT_LVL), " su personaje va a adquirir<br1>");
 		hb.append("un nuevo y llamatico efecto.<br1>");
 		hb.append("</center>");
-		
-		hb.append("</td>");
-		hb.append("</tr>");
-		hb.append("</table>");
 		return hb.toString();
 	}
 	
 	private static String infoTitleAndNameColor()
 	{
 		HtmlBuilder hb = new HtmlBuilder(HtmlType.HTML_TYPE);
-		hb.append("<table fixwidth=204 border=0 cellspacing=0 cellpadding=0>");
-		hb.append("<tr>");
-		hb.append("<td>");
-		
 		hb.append(Html.newImage(L2UI.SquareGray, 204, 1));
-		hb.append("<table fixwidth=204 border=0 cellspacing=0 cellpadding=0 bgcolor=CC99FF>");
+		hb.append("<table width=204 border=0 cellspacing=0 cellpadding=0 bgcolor=CC99FF>");
 		hb.append("<tr>");
 		hb.append("<td align=center fixwidth=104><button value=\"PvP\" width=104 height=19 back=L2UI_CH3.amountbox2 fore=L2UI_CH3.amountbox2></td>");
 		hb.append("<td align=center fixwidth=100><button value=\"Color\" width=100 height=19 back=L2UI_CH3.amountbox2 fore=L2UI_CH3.amountbox2></td>");
@@ -432,7 +393,7 @@ public class HomeComunityBoard extends AbstractMods
 		for (Entry<Integer, String> pvp : ConfigData.PVP_COLOR_NAME.entrySet())
 		{
 			hb.append(Html.newImage(L2UI.SquareGray, 204, 1));
-			hb.append("<table fixwidth=204 border=0 cellspacing=0 cellpadding=0>");
+			hb.append("<table width=204 border=0 cellspacing=0 cellpadding=0>");
 			hb.append("<tr>");
 			hb.append("<td align=center fixwidth=104>", pvp.getKey(), "</td>");
 			hb.append("<td align=center fixwidth=100>", Html.newFontColor(pvp.getValue(), "color"), "</td>");
@@ -441,16 +402,16 @@ public class HomeComunityBoard extends AbstractMods
 		}
 		
 		hb.append(Html.newImage(L2UI.SquareGray, 204, 1));
-		hb.append("<table fixwidth=204 border=0 cellspacing=0 cellpadding=0 bgcolor=CC99FF>");
+		hb.append("<table width=204 border=0 cellspacing=0 cellpadding=0 bgcolor=CC99FF>");
 		hb.append("<tr>");
 		hb.append("<td align=center fixwidth=104><button value=\"Pk\" width=104 height=19 back=L2UI_CH3.amountbox2 fore=L2UI_CH3.amountbox2></td>");
-		hb.append("<td align=center fixwidth=100><button value=\"color\" width=100 height=19 back=L2UI_CH3.amountbox2 fore=L2UI_CH3.amountbox2></td>");
+		hb.append("<td align=center fixwidth=100><button value=\"Color\" width=100 height=19 back=L2UI_CH3.amountbox2 fore=L2UI_CH3.amountbox2></td>");
 		hb.append("</tr>");
 		hb.append("</table>");
 		for (Entry<Integer, String> pk : ConfigData.PK_COLOR_TITLE.entrySet())
 		{
 			hb.append(Html.newImage(L2UI.SquareGray, 204, 1));
-			hb.append("<table fixwidth=204 border=0 cellspacing=0 cellpadding=0>");
+			hb.append("<table width=204 border=0 cellspacing=0 cellpadding=0>");
 			hb.append("<tr>");
 			hb.append("<td align=center fixwidth=104>", pk.getKey(), "</td>");
 			hb.append("<td align=center fixwidth=100>", Html.newFontColor(pk.getValue(), "color"), "</td>");
@@ -459,10 +420,6 @@ public class HomeComunityBoard extends AbstractMods
 		}
 		
 		hb.append(Html.newImage(L2UI.SquareGray, 204, 1));
-		
-		hb.append("</td>");
-		hb.append("</tr>");
-		hb.append("</table>");
 		return hb.toString();
 	}
 	
@@ -470,15 +427,12 @@ public class HomeComunityBoard extends AbstractMods
 	{
 		HtmlBuilder hb = new HtmlBuilder(HtmlType.HTML_TYPE);
 		
-		hb.append("<table fixwidth=204 border=0 cellspacing=0 cellpadding=0>");
-		hb.append("<tr>");
-		hb.append("<td>");
-		hb.append(Html.newFontColor("LEVEL", "Vote Reward"), "<br>");
+		hb.append("<br>", Html.newFontColor("LEVEL", "Vote Reward"), "<br>");
 		hb.append("Hopzone: ", ConfigData.ENABLE_HOPZONE ? Html.newFontColor("3CFF00", "Enable") : Html.newFontColor("FF0000", "Disable"), "<br1>");
 		hb.append("Topzone: ", ConfigData.ENABLE_TOPZONE ? Html.newFontColor("3CFF00", "Enable") : Html.newFontColor("FF0000", "Disable"), "<br1>");
 		hb.append("Network: ", ConfigData.ENABLE_NETWORK ? Html.newFontColor("3CFF00", "Enable") : Html.newFontColor("FF0000", "Disable"), "<br1>");
 		
-		hb.append("<center>Deatlles:<br1>");
+		hb.append("<center>Detalles:</center><br1>");
 		
 		for (Entry<Integer, RewardHolder> entry : ConfigData.VOTE_REWARDS.entrySet())
 		{
@@ -490,19 +444,12 @@ public class HomeComunityBoard extends AbstractMods
 			hb.append(Html.newFontColor("LEVEL", "Premios"), ": ", ItemTable.getInstance().getTemplate(reward.getRewardId()).getName(), " - ", reward.getRewardCount(), "<br1>");
 		}
 		hb.append(Html.newImage(L2UI.SquareGray, 204, 1));
-		hb.append("</td>");
-		hb.append("</tr>");
-		hb.append("</table>");
-		
 		return hb.toString();
 	}
 	
 	private static String infoAio()
 	{
 		HtmlBuilder hb = new HtmlBuilder(HtmlType.HTML_TYPE);
-		hb.append("<table fixwidth=204 border=0 cellspacing=0 cellpadding=0>");
-		hb.append("<tr>");
-		hb.append("<td>");
 		hb.append("<br>");
 		hb.append("El sistema AIO le da a un player<br1>");
 		hb.append("el poder de ", Html.newFontColor("LEVEL", "buffear a sus companieros"), "<br1>");
@@ -512,9 +459,6 @@ public class HomeComunityBoard extends AbstractMods
 		hb.append("recuperacion de MP y casteo.<br>");
 		hb.append("No podra salir de las zonas de paz<br1>");
 		hb.append("o interactuar con numersos NPC.");
-		hb.append("</td>");
-		hb.append("</tr>");
-		hb.append("</table>");
 		return hb.toString();
 	}
 	
@@ -522,69 +466,46 @@ public class HomeComunityBoard extends AbstractMods
 	{
 		HtmlBuilder hb = new HtmlBuilder(HtmlType.HTML_TYPE);
 		
-		hb.append("El sistema VIP le da a un player<br1>");
-		hb.append("capacidades ", Html.newFontColor("LEVEL", "extraordinarias"), "<br1>");
-		hb.append("aqui les dejo los detalles<br1>");
-		
+		hb.append("<br><font color=LEVEL>General Rate:</font>");
 		hb.append(Html.newImage(L2UI.SquareGray, 204, 1));
-		hb.append("<table fixwidth=204 border=0 cellspacing=0 cellpadding=0 bgcolor=CC99FF>");
+		hb.append("<table width=204 border=0 cellspacing=0 cellpadding=0>");
 		hb.append("<tr>");
 		hb.append("<td fixwidth=100 align=center><button value=\"Type\" width=100 height=19 back=L2UI_CH3.amountbox2 fore=L2UI_CH3.amountbox2></td>");
 		hb.append("<td fixwidth=104 align=center><button value=\"Bonus\" width=104 height=19 back=L2UI_CH3.amountbox2 fore=L2UI_CH3.amountbox2></td>");
 		hb.append("</tr>");
-		hb.append("</table>");
-		hb.append(Html.newImage(L2UI.SquareGray, 204, 1));
-		hb.append("<table fixwidth=204 border=0 cellspacing=0 cellpadding=0>");
 		hb.append("<tr>");
 		hb.append("<td fixwidth=100 align=center><font color=3366FF>EXP:</font></td>");
 		hb.append("<td fixwidth=104 align=center><font color=LEVEL>", (int) ConfigData.VIP_BONUS_XP + 100, "%</font></td>");
 		hb.append("</tr>");
-		hb.append("</table>");
-		hb.append(Html.newImage(L2UI.SquareGray, 204, 1));
-		hb.append("<table fixwidth=204 border=0 cellspacing=0 cellpadding=0>");
 		hb.append("<tr>");
 		hb.append("<td fixwidth=100 align=center><font color=3366FF>SP:</font></td>");
 		hb.append("<td fixwidth=104 align=center><font color=LEVEL>", (int) ConfigData.VIP_BONUS_SP + 100, "%</font></td>");
 		hb.append("</tr>");
 		hb.append("</table>");
 		hb.append(Html.newImage(L2UI.SquareGray, 204, 1));
-		
-		hb.append("<br><br><font color=LEVEL>The VIP have drop rate:</font><br>");
-		
+		hb.append("<br><font color=LEVEL>Drop Rate:</font>");
 		hb.append(Html.newImage(L2UI.SquareGray, 204, 1));
-		hb.append("<table fixwidth=204 border=0 cellspacing=0 cellpadding=0 bgcolor=CC99FF>");
+		hb.append("<table width=204 border=0 cellspacing=0 cellpadding=0>");
 		hb.append("<tr>");
 		hb.append("<td fixwidth=100><button value=\"Bonus\" width=100 height=19 back=L2UI_CH3.amountbox2 fore=L2UI_CH3.amountbox2></td>");
 		hb.append("<td fixwidth=52><button value=\"Amount\" width=52 height=19 back=L2UI_CH3.amountbox2 fore=L2UI_CH3.amountbox2></td>");
 		hb.append("<td fixwidth=52><button value=\"Chance\" width=52 height=19 back=L2UI_CH3.amountbox2 fore=L2UI_CH3.amountbox2></td>");
 		hb.append("</tr>");
-		hb.append("</table>");
-		hb.append(Html.newImage(L2UI.SquareGray, 204, 1));
-		hb.append("<table fixwidth=204 border=0 cellspacing=0 cellpadding=0>");
 		hb.append("<tr>");
 		hb.append("<td fixwidth=100 align=center><font color=3366FF>Normal:</font></td>");
 		hb.append("<td fixwidth=52 align=center><font color=LEVEL>", (int) ConfigData.VIP_BONUS_DROP_NORMAL_AMOUNT + 100, "%</font></td>");
 		hb.append("<td fixwidth=52 align=center><font color=LEVEL>", (int) ConfigData.VIP_BONUS_DROP_NORMAL_AMOUNT + 100, "%</font></td>");
 		hb.append("</tr>");
-		hb.append("</table>");
-		hb.append(Html.newImage(L2UI.SquareGray, 204, 1));
-		hb.append("<table fixwidth=204 border=0 cellspacing=0 cellpadding=0>");
 		hb.append("<tr>");
 		hb.append("<td fixwidth=100 align=center><font color=3366FF>Spoil:</font></td>");
 		hb.append("<td fixwidth=52 align=center><font color=LEVEL>", (int) ConfigData.VIP_BONUS_DROP_SPOIL_AMOUNT + 100, "%</font></td>");
 		hb.append("<td fixwidth=52 align=center><font color=LEVEL>", (int) ConfigData.VIP_BONUS_DROP_SPOIL_CHANCE + 100, "%</font></td>");
 		hb.append("</tr>");
-		hb.append("</table>");
-		hb.append(Html.newImage(L2UI.SquareGray, 204, 1));
-		hb.append("<table fixwidth=204 border=0 cellspacing=0 cellpadding=0>");
 		hb.append("<tr>");
 		hb.append("<td fixwidth=100 align=center><font color=3366FF>Seed:</font></td>");
 		hb.append("<td fixwidth=52 align=center><font color=LEVEL>", (int) ConfigData.VIP_BONUS_DROP_SEED_AMOUNT + 100, "%</font></td>");
 		hb.append("<td fixwidth=52 align=center><font color=LEVEL>", (int) ConfigData.VIP_BONUS_DROP_SEED_AMOUNT + 100, "%</font></td>");
 		hb.append("</tr>");
-		hb.append("</table>");
-		hb.append(Html.newImage(L2UI.SquareGray, 204, 1));
-		hb.append("<table fixwidth=204 border=0 cellspacing=0 cellpadding=0>");
 		hb.append("<tr>");
 		hb.append("<td fixwidth=100 align=center><font color=3366FF>Herb:</font></td>");
 		hb.append("<td fixwidth=52 align=center><font color=LEVEL>", (int) ConfigData.VIP_BONUS_DROP_HERB_AMOUNT + 100, "%</font></td>");
@@ -599,24 +520,18 @@ public class HomeComunityBoard extends AbstractMods
 	{
 		HtmlBuilder hb = new HtmlBuilder(HtmlType.HTML_TYPE);
 		
-		hb.append("Enchant ", Html.newFontColor("LEVEL", "Info"), "<br1>");
-		hb.append("<font color=LEVEL></font><br><br>");
+		hb.append("<br><center>", Html.newFontColor("LEVEL", "Enchant Info"), "</center>");
+		
 		hb.append(Html.newImage(L2UI.SquareGray, 204, 1));
-		hb.append("<table fixwidth=204 border=0 cellspacing=0 cellpadding=0 bgcolor=CC99FF>");
+		hb.append("<table width=204 border=0 cellspacing=0 cellpadding=0>");
 		hb.append("<tr>");
 		hb.append("<td fixwidth=100 align=center><button value=\"Type\" width=100 height=19 back=L2UI_CH3.amountbox2 fore=L2UI_CH3.amountbox2></td>");
 		hb.append("<td fixwidth=104 align=center><button value=\"Status\" width=104 height=19 back=L2UI_CH3.amountbox2 fore=L2UI_CH3.amountbox2></td>");
 		hb.append("</tr>");
-		hb.append("</table>");
-		hb.append(Html.newImage(L2UI.SquareGray, 204, 1));
-		hb.append("<table fixwidth=204 border=0 cellspacing=0 cellpadding=0>");
 		hb.append("<tr>");
 		hb.append("<td fixwidth=100 align=center><font color=3366FF>Max:</font></td>");
 		hb.append("<td fixwidth=104 align=center><font color=LEVEL>", Config.ENCHANT_SAFE_MAX_FULL, "</font></td>");
 		hb.append("</tr>");
-		hb.append("</table>");
-		hb.append(Html.newImage(L2UI.SquareGray, 204, 1));
-		hb.append("<table fixwidth=204 border=0 cellspacing=0 cellpadding=0>");
 		hb.append("<tr>");
 		hb.append("<td fixwidth=100 align=center><font color=3366FF>Safe:</font></td>");
 		hb.append("<td fixwidth=104 align=center><font color=LEVEL>", Config.ENCHANT_SAFE_MAX, "</font></td>");
@@ -624,35 +539,25 @@ public class HomeComunityBoard extends AbstractMods
 		hb.append("</table>");
 		hb.append(Html.newImage(L2UI.SquareGray, 204, 1));
 		
-		hb.append("<br><br><font color=LEVEL>Type/Min%/Max%</font><br>");
-		hb.append("<font color=LEVEL></font><br><br>");
+		hb.append("<br><center>", Html.newFontColor("LEVEL", "Rates"), "</center>");
 		
 		hb.append(Html.newImage(L2UI.SquareGray, 204, 1));
-		hb.append("<table fixwidth=204 border=0 cellspacing=0 cellpadding=0 bgcolor=CC99FF>");
+		hb.append("<table width=204 border=0 cellspacing=0 cellpadding=0>");
 		hb.append("<tr>");
-		hb.append("<td fixwidth=100><button value=\"Type\" width=100 height=19 back=L2UI_CH3.amountbox2 fore=L2UI_CH3.amountbox2></td>");
-		hb.append("<td fixwidth=52><button value=\"Min \" width=52 height=19 back=L2UI_CH3.amountbox2 fore=L2UI_CH3.amountbox2></td>");
-		hb.append("<td fixwidth=52><button value=\"Max\" width=52 height=19 back=L2UI_CH3.amountbox2 fore=L2UI_CH3.amountbox2></td>");
+		hb.append("<td fixwidth=100><button value=Type width=100 height=19 back=L2UI_CH3.amountbox2 fore=L2UI_CH3.amountbox2></td>");
+		hb.append("<td fixwidth=52><button value=Min width=52 height=19 back=L2UI_CH3.amountbox2 fore=L2UI_CH3.amountbox2></td>");
+		hb.append("<td fixwidth=52><button value=Max width=52 height=19 back=L2UI_CH3.amountbox2 fore=L2UI_CH3.amountbox2></td>");
 		hb.append("</tr>");
-		hb.append("</table>");
-		hb.append(Html.newImage(L2UI.SquareGray, 204, 1));
-		hb.append("<table fixwidth=204 border=0 cellspacing=0 cellpadding=0>");
 		hb.append("<tr>");
 		hb.append("<td fixwidth=100 align=center><font color=3366FF>Normal:</font></td>");
 		hb.append("<td fixwidth=52 align=center><font color=LEVEL>", 45, "%</font></td>");
 		hb.append("<td fixwidth=52 align=center><font color=LEVEL>", 75, "%</font></td>");
 		hb.append("</tr>");
-		hb.append("</table>");
-		hb.append(Html.newImage(L2UI.SquareGray, 204, 1));
-		hb.append("<table fixwidth=204 border=0 cellspacing=0 cellpadding=0>");
 		hb.append("<tr>");
 		hb.append("<td fixwidth=100 align=center><font color=3366FF>Bless:</font></td>");
 		hb.append("<td fixwidth=52 align=center><font color=LEVEL>", 75, "%</font></td>");
 		hb.append("<td fixwidth=52 align=center><font color=LEVEL>", 85, "%</font></td>");
 		hb.append("</tr>");
-		hb.append("</table>");
-		hb.append(Html.newImage(L2UI.SquareGray, 204, 1));
-		hb.append("<table fixwidth=204 border=0 cellspacing=0 cellpadding=0>");
 		hb.append("<tr>");
 		hb.append("<td fixwidth=100 align=center><font color=3366FF>Crytal:</font></td>");
 		hb.append("<td fixwidth=52 align=center><font color=LEVEL>", 85, "%</font></td>");
@@ -667,25 +572,18 @@ public class HomeComunityBoard extends AbstractMods
 	{
 		HtmlBuilder hb = new HtmlBuilder(HtmlType.HTML_TYPE);
 		
-		hb.append("Info ", Html.newFontColor("LEVEL", "Rates"), "<br1>");
-		hb.append("<br><br><font color=LEVEL></font><br>");
+		hb.append("<br><center>", Html.newFontColor("LEVEL", "Rate Info"), "</center>");
 		
 		hb.append(Html.newImage(L2UI.SquareGray, 204, 1));
-		hb.append("<table fixwidth=204 border=0 cellspacing=0 cellpadding=0 bgcolor=CC99FF>");
+		hb.append("<table width=204 border=0 cellspacing=0 cellpadding=0>");
 		hb.append("<tr>");
 		hb.append("<td fixwidth=100 align=center><button value=\"Type\" width=100 height=19 back=L2UI_CH3.amountbox2 fore=L2UI_CH3.amountbox2></td>");
 		hb.append("<td fixwidth=104 align=center><button value=\"Chance\" width=104 height=19 back=L2UI_CH3.amountbox2 fore=L2UI_CH3.amountbox2></td>");
 		hb.append("</tr>");
-		hb.append("</table>");
-		hb.append(Html.newImage(L2UI.SquareGray, 204, 1));
-		hb.append("<table fixwidth=204 border=0 cellspacing=0 cellpadding=0>");
 		hb.append("<tr>");
 		hb.append("<td fixwidth=100 align=center><font color=3366FF>EXP:</font></td>");
 		hb.append("<td fixwidth=104 align=center><font color=LEVEL>", Config.RATE_XP, "%</font></td>");
 		hb.append("</tr>");
-		hb.append("</table>");
-		hb.append(Html.newImage(L2UI.SquareGray, 204, 1));
-		hb.append("<table fixwidth=204 border=0 cellspacing=0 cellpadding=0>");
 		hb.append("<tr>");
 		hb.append("<td fixwidth=100 align=center><font color=3366FF>SP:</font></td>");
 		hb.append("<td fixwidth=104 align=center><font color=LEVEL>", Config.RATE_SP, "%</font></td>");
@@ -693,31 +591,21 @@ public class HomeComunityBoard extends AbstractMods
 		hb.append("</table>");
 		hb.append(Html.newImage(L2UI.SquareGray, 204, 1));
 		
-		hb.append("Others ", Html.newFontColor("LEVEL", "Rates"), "<br1>");
-		hb.append("<br><br><font color=LEVEL></font><br>");
-		hb.append("<table fixwidth=204 border=0 cellspacing=0 cellpadding=0 bgcolor=CC99FF>");
+		hb.append("<br><center>", Html.newFontColor("LEVEL", "Rate Others"), "</center>");
+		
+		hb.append("<table width=204 border=0 cellspacing=0 cellpadding=0>");
 		hb.append("<tr>");
 		hb.append("<td fixwidth=100 align=center><button value=\"Type\" width=100 height=19 back=L2UI_CH3.amountbox2 fore=L2UI_CH3.amountbox2></td>");
 		hb.append("<td fixwidth=104 align=center><button value=\"Status\" width=104 height=19 back=L2UI_CH3.amountbox2 fore=L2UI_CH3.amountbox2></td>");
 		hb.append("</tr>");
-		hb.append("</table>");
-		hb.append(Html.newImage(L2UI.SquareGray, 204, 1));
-		
-		hb.append("<table fixwidth=204 border=0 cellspacing=0 cellpadding=0>");
 		hb.append("<tr>");
 		hb.append("<td fixwidth=100 align=center><font color=3366FF>Adena:</font></td>");
 		hb.append("<td fixwidth=104 align=center><font color=LEVEL>", Config.RATE_DROP_ADENA, "%</font></td>");
 		hb.append("</tr>");
-		hb.append("</table>");
-		hb.append(Html.newImage(L2UI.SquareGray, 204, 1));
-		hb.append("<table fixwidth=204 border=0 cellspacing=0 cellpadding=0>");
 		hb.append("<tr>");
 		hb.append("<td fixwidth=100 align=center><font color=3366FF>Drop:</font></td>");
 		hb.append("<td fixwidth=104 align=center><font color=LEVEL>", Config.RATE_DROP_ITEMS, "%</font></td>");
 		hb.append("</tr>");
-		hb.append("</table>");
-		hb.append(Html.newImage(L2UI.SquareGray, 204, 1));
-		hb.append("<table fixwidth=204 border=0 cellspacing=0 cellpadding=0>");
 		hb.append("<tr>");
 		hb.append("<td fixwidth=100 align=center><font color=3366FF>Spoil:</font></td>");
 		hb.append("<td fixwidth=104 align=center><font color=LEVEL>", Config.RATE_DROP_SPOIL, "%</font></td>");
