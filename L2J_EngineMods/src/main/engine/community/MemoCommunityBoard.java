@@ -15,6 +15,7 @@ package main.engine.community;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Map.Entry;
 import java.util.StringTokenizer;
 
@@ -42,8 +43,6 @@ import net.sf.l2j.gameserver.network.clientpackets.Say2;
 import net.sf.l2j.gameserver.network.serverpackets.CreatureSay;
 import net.sf.l2j.gameserver.network.serverpackets.ExShowScreenMessage;
 import net.sf.l2j.gameserver.network.serverpackets.ExShowScreenMessage.SMPOS;
-import net.sf.l2j.gameserver.network.serverpackets.InventoryUpdate;
-import net.sf.l2j.gameserver.network.serverpackets.StatusUpdate;
 
 /**
  * @author fissban
@@ -125,13 +124,7 @@ public class MemoCommunityBoard extends AbstractMods
 			// remove from db and memory
 			removeSold(ph, ih.getkey());
 			
-			// enviamos un mensaje avisando de la venta
-			Item item = ItemTable.getInstance().getTemplate(ih.getItemId());
-			player.sendPacket(new CreatureSay(0, Say2.TELL, "Auction", "Has vendido el item " + item.getName()));
-			
-			// aplicamos 10% descuento al vender el item
-			int descuento = (int) (ih.getItemPriceCount() / 1.1);
-			player.addItem("auction sold", ih.getItemPriceId(), ih.getItemPriceCount() - descuento, player, false);
+			giveAuctionSold(player, ih);
 		}
 	}
 	
@@ -440,39 +433,13 @@ public class MemoCommunityBoard extends AbstractMods
 		// prevenimos posible bypass
 		if (item != null)
 		{
-			// update inventario
-			InventoryUpdate iu = new InventoryUpdate();
-			
-			if (item.getCount() == 0)
-			{
-				iu.addRemovedItem(item);
-			}
-			else
-			{
-				iu.addModifiedItem(item);
-			}
-			
-			player.sendPacket(iu);
-			
-			StatusUpdate su = new StatusUpdate(player);
-			su.addAttribute(StatusUpdate.CUR_LOAD, player.getCurrentLoad());
-			player.sendPacket(su);
-			
 			// se busca un key no usado para los personajes
-			int id = -1;
-			for (int i = 1; i <= 100; i++)
-			{
-				if (!ph.getAuctionsSell().containsKey(i))
-				{
-					id = i;
-					break;
-				}
-			}
-			
+			int id = getNewKey(ph.getAuctionsSell());
 			if (id == -1)
 			{
-				return "<br><br><br>ufff un error al obtener el nuevo id del item a vender";
+				return "<br><br><br>ufff un error al obtener el nuevo id del item ";
 			}
+			
 			AuctionItemHolder ash = new AuctionItemHolder(id, player.getObjectId(), itemObjId, item.getItemId(), itemCount, item.getEnchantLevel(), itemPriceCount, itemPriceId);
 			// salvamos el item en la DB
 			ph.addAuctionSell(id, ash);
@@ -568,24 +535,28 @@ public class MemoCommunityBoard extends AbstractMods
 			itemBuy.setEnchantLevel(ih.getItemEnchantLevel());// definimos el lvl del enchant
 			player.addItem("auction buy", itemBuy, player, true);// se lo entregamos al player
 			
-			Player owner = World.getInstance().getPlayer(ih.getOwnerId());
+			Player owner = World.getInstance().getPlayer(phOwner.getObjectId());
 			
 			// se entrega la adena de la venta al duenio.
 			if (owner == null)
 			{
-				// se incrementa en 1 la cantidad de items vendidos
-				removeSold(phOwner, key);
+				// se busca un key no usado para el personaje
+				int id = getNewKey(phOwner.getAuctionsSold());
+				
+				if (id == -1)
+				{
+					return "<br><br><br>ufff un error al obtener el nuevo id del item ";
+				}
+				
+				ih.setKey(id);
+				
+				// se incrementa la cantidad de items vendidos a entregar cuando se conecte
+				phOwner.addAuctionSold(ih.getkey(), ih);
+				setValueDB(phOwner.getObjectId(), "auctionSold " + ih.getkey(), ih.toString());
 			}
 			else
 			{
-				// template del item
-				Item item = ItemTable.getInstance().getTemplate(ih.getItemId());
-				// mensajes
-				owner.sendPacket(new CreatureSay(0, Say2.TELL, "Auction", "Has vendido el item " + item.getName()));
-				owner.sendPacket(new ExShowScreenMessage("Has vendido el item " + item.getName(), 10000, SMPOS.TOP_CENTER, false));
-				
-				// aplicamos 10% descuento al vender el item q se queda la caza
-				owner.addItem("auction sell", ih.getItemPriceId(), (int) (ih.getItemPriceCount() / 1.1), owner, false);
+				giveAuctionSold(owner, ih);
 			}
 			
 			// se remueve el valor de la memoria
@@ -966,5 +937,30 @@ public class MemoCommunityBoard extends AbstractMods
 		}
 		
 		return false;
+	}
+	
+	private static void giveAuctionSold(Player owner, AuctionItemHolder ih)
+	{
+		// template del item
+		Item item = ItemTable.getInstance().getTemplate(ih.getItemId());
+		// mensajes
+		owner.sendPacket(new CreatureSay(0, Say2.TELL, "Auction", "Has vendido el item " + item.getName()));
+		owner.sendPacket(new ExShowScreenMessage("Has vendido el item " + item.getName(), 10000, SMPOS.TOP_CENTER, false));
+	}
+	
+	private static int getNewKey(Map<Integer, AuctionItemHolder> map)
+	{
+		// se busca un key no usado para el personaje
+		int id = -1;
+		for (int i = 1; i <= 100; i++)
+		{
+			if (!map.containsKey(i))
+			{
+				id = i;
+				break;
+			}
+		}
+		
+		return id;
 	}
 }
