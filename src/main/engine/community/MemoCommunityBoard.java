@@ -634,8 +634,8 @@ public class MemoCommunityBoard extends AbstractMods
 			
 			hb.append("<td width=50>Price:</td>");
 			hb.append("<td width=50><edit var=\"price", color, "\" width=50></td>");
-			hb.append("<td width=50><combobox width=50 var=item list=Adena;coin1;coin2;coin3;></td>");
-			hb.append("<td width=50><button value=SELL action=\"bypass _bbsmemo sellItem ", item.getObjectId(), " $count", color, " $price", color, " $item\" width=50 height=21 back=", L2UI_CH3.Btn1_normalOn, " fore=", L2UI_CH3.Btn1_normal, "></td>");
+			hb.append("<td width=50><combobox width=50 var=item", color, " list=Adena;coin1;coin2;coin3;></td>");
+			hb.append("<td width=50><button value=SELL action=\"bypass _bbsmemo sellItem ", item.getObjectId(), " $count", color, " $price", color, " $item", color, "\" width=50 height=21 back=", L2UI_CH3.Btn1_normalOn, " fore=", L2UI_CH3.Btn1_normal, "></td>");
 			hb.append("</tr>");
 			hb.append("</table>");
 			hb.append(Html.newImage(L2UI.SquareGray, 600, 1));
