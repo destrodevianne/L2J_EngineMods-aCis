@@ -192,7 +192,7 @@ public class ConfigData
 	public static String NEW_CHARACTER_CREATED_TITLE;
 	public static boolean NEW_CHARACTER_CREATED_GIVE_BUFF;
 	public static List<IntIntHolder> NEW_CHARACTER_CREATED_BUFFS = new ArrayList<>();
-	public static String NEW_CHARACTER_CREATED_SEND_SCREEN_MSG;
+	public static String NEW_CHARACTER_CREATED_SEND_SCREEN_MSG = "";
 	// AIO -------------------------------------------------------------------------------------------------------- //
 	public static Map<Stats, Double> AIO_STATS = new HashMap<>();
 	
