@@ -77,6 +77,11 @@ public class AuctionItemHolder
 		return _key;
 	}
 	
+	public void setKey(int key)
+	{
+		_key = key;
+	}
+	
 	public int getOwnerId()
 	{
 		return _ownerId;
