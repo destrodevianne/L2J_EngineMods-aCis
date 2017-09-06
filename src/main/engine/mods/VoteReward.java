@@ -24,6 +24,7 @@ import main.data.PlayerData;
 import main.engine.AbstractMods;
 import main.holders.PlayerHolder;
 import main.holders.RewardHolder;
+import main.util.Util;
 import net.sf.l2j.gameserver.model.World;
 import net.sf.l2j.gameserver.model.actor.Npc;
 import net.sf.l2j.gameserver.model.actor.instance.Player;
@@ -144,14 +145,9 @@ public class VoteReward extends AbstractMods
 			}
 			
 			PlayerHolder ph = PlayerData.get(player);
-			if (ph.isOffline() || ph.isFake())
+			if (ph.isOffline() || ph.isFake() || player.isInJail())
 			{
-				return;
-			}
-			
-			if (player.isInJail())
-			{
-				return;
+				continue;
 			}
 			
 			// XXX Si se desea agregar un control de ip aqui es el lugar
@@ -249,28 +245,15 @@ public class VoteReward extends AbstractMods
 		int votes = 0;
 		try
 		{
-			URLConnection con = new URL(ConfigData.TOPZONE_URL).openConnection();
-			
-			con.addRequestProperty("User-Agent", "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/53.0.2785.143 Safari/537.36");
-			con.setConnectTimeout(5000);
-			
-			try (BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream())))
-			{
-				
-				String inputLine;
-				while ((inputLine = in.readLine()) != null)
-				{
-					if (inputLine.contains("fa fa-fw fa-lg fa-thumbs-up"))
-					{
-						return Integer.valueOf(inputLine.split(">")[3].replace("</span", ""));
-					}
-				}
-			}
+			BufferedReader in = new BufferedReader(new InputStreamReader(new URL(ConfigData.TOPZONE_URL).openConnection().getInputStream()));
+			String cadena = in.readLine();
+			in.close();
+			return Integer.parseInt(Util.getJsonVariable(cadena, "totalVotes"));
 		}
 		catch (Exception e)
 		{
 			LOG.warning("Error while getting Topzone server vote count.");
-			// e.printStackTrace();
+			e.printStackTrace();
 		}
 		
 		return votes;
@@ -285,22 +268,10 @@ public class VoteReward extends AbstractMods
 		int votes = 0;
 		try
 		{
-			URLConnection con = new URL(ConfigData.HOPZONE_URL).openConnection();
-			
-			con.addRequestProperty("User-Agent", "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/53.0.2785.143 Safari/537.36");
-			con.setConnectTimeout(5000);
-			
-			try (BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream())))
-			{
-				String inputLine;
-				while ((inputLine = in.readLine()) != null)
-				{
-					if (inputLine.contains("rank tooltip"))
-					{
-						return Integer.valueOf(inputLine.split(">")[2].replace("</span", ""));
-					}
-				}
-			}
+			BufferedReader in = new BufferedReader(new InputStreamReader(new URL(ConfigData.HOPZONE_URL).openConnection().getInputStream()));
+			String tokens = in.readLine();
+			in.close();
+			return Integer.parseInt(Util.getJsonVariable(tokens, "totalvotes"));
 		}
 		catch (Exception e)
 		{
