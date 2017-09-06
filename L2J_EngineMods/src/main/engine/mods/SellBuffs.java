@@ -34,6 +34,8 @@ import net.sf.l2j.gameserver.model.WorldObject;
 import net.sf.l2j.gameserver.model.actor.Creature;
 import net.sf.l2j.gameserver.model.actor.instance.Player;
 import net.sf.l2j.gameserver.model.zone.ZoneId;
+import net.sf.l2j.gameserver.network.serverpackets.ActionFailed;
+import net.sf.l2j.gameserver.skills.Formulas;
 import net.sf.l2j.gameserver.templates.skills.L2SkillType;
 
 /**
@@ -148,6 +150,7 @@ public class SellBuffs extends AbstractMods
 				player.setIsImmobilized(true);
 				player.setTeam(TeamType.BLUE.ordinal());
 				player.broadcastUserInfo();
+				// TODO Hay que variar la posicion del doInteract en core de aCis y aqui poner modo de venta en Sell para que aparezca
 				player.broadcastPacket(new PrivateCustomTitle(player, TitleType.SELL, "SellBuffs"));
 				break;
 			}
@@ -200,8 +203,10 @@ public class SellBuffs extends AbstractMods
 				
 				ThreadPool.schedule(() ->
 				{
-					sellerBuff.sitDown();
-				}, skill.getHitTime() + 100);
+					sellerBuff.setIsImmobilized(false);
+					sellerBuff.sitDown(false);
+					sellerBuff.setIsImmobilized(true);
+				}, Formulas.calcAtkSpd(sellerBuff, skill, skill.getHitTime()) + 100);
 				
 				int page = 1;
 				if (st.hasMoreTokens())
@@ -244,6 +249,8 @@ public class SellBuffs extends AbstractMods
 		tb.append("</body></html>");
 		
 		sendHtml(player, null, tb);
+		// Enviamos este packet para evitar que el personaje quede bugueado sin poder moverse
+		player.sendPacket(ActionFailed.STATIC_PACKET);
 		return true;
 	}
 	

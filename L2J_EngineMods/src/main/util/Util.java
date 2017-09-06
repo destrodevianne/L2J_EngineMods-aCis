@@ -72,4 +72,32 @@ public class Util
 		
 		return list;
 	}
+	
+	/**
+	 * Metodo para extraer cualquier tipo variable de un documento en JSON sin necesidad de librerias externas
+	 * @param cadena Texto que devuelva la API de TopZone o Hopzone
+	 * @param variable Valor que quieres obtener
+	 * @return Valor de la variable que se define
+	 */
+	public static String getJsonVariable(String cadena, String variable)
+	{
+		cadena.replaceAll("\\}", "");
+		String[] cadena_separada = cadena.split("\\{");
+		for (String a : cadena_separada)
+		{
+			if (a.contains(variable))
+			{
+				String[] a_separada = a.split(",");
+				for (String b : a_separada)
+				{
+					if (b.contains(variable))
+					{
+						String[] b_separada = b.split(":");
+						return b_separada[1].replaceAll("\"", "");
+					}
+				}
+			}
+		}
+		return "";
+	}
 }

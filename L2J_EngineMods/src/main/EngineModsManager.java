@@ -468,7 +468,7 @@ public class EngineModsManager
 	{
 		ENGINES_MODS.values().stream().filter(mod -> command.startsWith(mod.getClass().getSimpleName()) && mod.isStarting()).forEach(mod ->
 		{
-			if (npc != null && !player.isInsideRadius(npc, Folk.INTERACTION_DISTANCE, false, false))
+			if (npc != null && player.getTarget() == npc && !player.isInsideRadius(npc, Folk.INTERACTION_DISTANCE, false, false))
 			{
 				return;
 			}
