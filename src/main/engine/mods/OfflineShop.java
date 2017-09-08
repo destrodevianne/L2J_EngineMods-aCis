@@ -224,7 +224,7 @@ public class OfflineShop extends AbstractMods
 				
 				if (shopType.equals("SELL_BUFF"))
 				{
-					EngineModsManager.onEvent(player, null, "SellBuffs sell " + shopItems); // shopItems -> price
+					EngineModsManager.onEvent(player, "SellBuffs sell " + shopItems); // shopItems -> price
 				}
 				else
 				{

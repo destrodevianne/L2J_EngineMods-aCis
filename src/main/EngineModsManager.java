@@ -63,6 +63,7 @@ import main.engine.stats.StatsPlayer;
 import main.instances.NpcDropsInstance;
 import main.instances.NpcExpInstance;
 import main.util.Util;
+import net.sf.l2j.gameserver.model.WorldObject;
 import net.sf.l2j.gameserver.model.actor.Attackable;
 import net.sf.l2j.gameserver.model.actor.Creature;
 import net.sf.l2j.gameserver.model.actor.Npc;
@@ -464,18 +465,25 @@ public class EngineModsManager
 	 * @param npc
 	 * @param command
 	 */
-	public static synchronized void onEvent(Player player, Creature npc, String command)
+	public static synchronized void onEvent(Player player, String command)
 	{
 		ENGINES_MODS.values().stream().filter(mod -> command.startsWith(mod.getClass().getSimpleName()) && mod.isStarting()).forEach(mod ->
 		{
-			if (npc != null && player.getTarget() == npc && !player.isInsideRadius(npc, Folk.INTERACTION_DISTANCE, false, false))
+			WorldObject obj = player.getTarget();
+			
+			if (!(obj instanceof Creature))
+			{
+				return;
+			}
+			
+			if (obj != null && !player.isInsideRadius(obj, Folk.INTERACTION_DISTANCE, false, false))
 			{
 				return;
 			}
 			
 			try
 			{
-				mod.onEvent(player, npc, command.replace(mod.getClass().getSimpleName() + " ", ""));
+				mod.onEvent(player, (Creature) obj, command.replace(mod.getClass().getSimpleName() + " ", ""));
 			}
 			catch (Exception e)
 			{
@@ -588,7 +596,6 @@ public class EngineModsManager
 				e.printStackTrace();
 			}
 		});
-		
 	}
 	
 	public static synchronized void onEquip(Creature player)

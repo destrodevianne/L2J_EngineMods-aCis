@@ -1,14 +1,3 @@
-Index: .classpath
-===================================================================
---- .classpath	(revision 2)
-+++ .classpath	(working copy)
-@@ -6,5 +6,6 @@
- 	<classpathentry kind="lib" path="lib/c3p0-0.9.5-pre5.jar"/>
- 	<classpathentry kind="lib" path="lib/mchange-commons-java-0.2.6.2.jar"/>
- 	<classpathentry kind="lib" path="lib/mysql-connector-java-5.1.26.jar"/>
-+	<classpathentry kind="lib" path="lib/L2J_EngineMods.jar"/>
- 	<classpathentry kind="output" path="bin"/>
- </classpath>
 Index: java/net/sf/l2j/gameserver/GameServer.java
 ===================================================================
 --- java/net/sf/l2j/gameserver/GameServer.java	(revision 2)
@@ -22,11 +11,10 @@ Index: java/net/sf/l2j/gameserver/GameServer.java
  public class GameServer
  {
  	private static final Logger _log = Logger.getLogger(GameServer.class.getName());
-@@ -151,6 +153,10 @@
+@@ -151,6 +153,9 @@
  		StringUtil.printSection("IdFactory");
  		IdFactory.getInstance();
  		
-+		// custom by fissban
 +		StringUtil.printSection("EngineMods");
 +		EngineModsManager.init();
 +		
@@ -61,11 +49,10 @@ Index: java/net/sf/l2j/gameserver/Shutdown.java
  /**
   * This class provides functions for shutting down and restarting the server. It closes all client connections and saves data.
   */
-@@ -100,6 +102,9 @@
+@@ -100,6 +102,8 @@
  		{
  			StringUtil.printSection("Under " + MODE_TEXT[_shutdownMode] + " process");
  			
-+			// custom by fissban
 +			EngineModsManager.onShutDown();
 +			
  			// disconnect players
@@ -145,11 +132,10 @@ Index: java/net/sf/l2j/gameserver/model/L2Spawn.java
  /**
   * This class manages the spawn and respawn a {@link Npc}.<br>
   * <br>
-@@ -409,6 +411,9 @@
+@@ -409,6 +411,8 @@
  		// set heading (random heading if not defined)
  		_npc.setHeading(_loc.getHeading() < 0 ? Rnd.get(65536) : _loc.getHeading());
  		
-+		// custom by fissban
 +		EngineModsManager.onSpawn(_npc);
 +		
  		// spawn NPC on new coordinates
@@ -168,17 +154,16 @@ Index: java/net/sf/l2j/gameserver/model/actor/Attackable.java
  /**
   * This class manages all NPC that can be attacked. It inherits from L2Npc.
   */
-@@ -182,6 +184,9 @@
+@@ -182,6 +184,8 @@
  			
  			if (player != null)
  			{
-+				// custom by fissban
 +				EngineModsManager.onKill(killer, this, killer instanceof Summon);
 +				
  				List<Quest> quests = getTemplate().getEventQuests(EventType.ON_KILL);
  				if (quests != null)
  					for (Quest quest : quests)
-@@ -214,6 +219,9 @@
+@@ -214,6 +218,9 @@
  		if (_aggroList.isEmpty())
  			return;
  		
@@ -188,11 +173,10 @@ Index: java/net/sf/l2j/gameserver/model/actor/Attackable.java
  		// Creates an empty list of rewards.
  		final Map<Creature, RewardInfo> rewards = new ConcurrentHashMap<>();
  		
-@@ -1044,6 +1052,10 @@
+@@ -1044,6 +1051,9 @@
  		if (player == null)
  			return;
  		
-+		// Custom by fissban
 +		if (EngineModsManager.onNpcDrop(this, mainDamageDealer))
 +			return;
 +		
@@ -234,12 +218,10 @@ Index: java/net/sf/l2j/gameserver/model/actor/Npc.java
  /**
   * This class represents a Non Playable Character (or NPC) in the world.
   */
-@@ -345,6 +347,11 @@
+@@ -345,6 +347,9 @@
  					if (hasRandomAnimation())
  						onRandomAnimation(Rnd.get(8));
  					
-+					// Custom by fissban
-+					player.setLastNpcTalk(this);
 +					if (EngineModsManager.onInteract(player, this))
 +						return;
 +					
@@ -259,11 +241,10 @@ Index: java/net/sf/l2j/gameserver/model/actor/Playable.java
  /**
   * This class represents all Playable characters in the world.<BR>
   * <BR>
-@@ -92,6 +94,10 @@
+@@ -92,6 +94,9 @@
  			setIsDead(true);
  		}
  		
-+		// Custom by fissban
 +		EngineModsManager.onKill(killer, this, killer instanceof Summon);
 +		EngineModsManager.onDeath(this);
 +		
@@ -395,24 +376,6 @@ Index: java/net/sf/l2j/gameserver/model/actor/instance/Player.java
  		try (Connection con = L2DatabaseFactory.getInstance().getConnection(); PreparedStatement ps = con.prepareStatement(RESTORE_SKILLS_FOR_CHAR))
  		{
  			ps.setInt(1, getObjectId());
-@@ -10536,4 +10561,16 @@
- 			}
- 		}
- 	}
-+	
-+	private Npc _lastTalkNpc;
-+	
-+	public Npc getLastNpcTalk()
-+	{
-+		return _lastTalkNpc;
-+	}
-+	
-+	public void setLastNpcTalk(Npc npc)
-+	{
-+		_lastTalkNpc = npc;
-+	}
- }
-\ No newline at end of file
 Index: java/net/sf/l2j/gameserver/model/actor/stat/CreatureStat.java
 ===================================================================
 --- java/net/sf/l2j/gameserver/model/actor/stat/CreatureStat.java	(revision 2)
@@ -426,13 +389,12 @@ Index: java/net/sf/l2j/gameserver/model/actor/stat/CreatureStat.java
  public class CreatureStat
  {
  	private final Creature _activeChar;
-@@ -83,7 +85,9 @@
+@@ -83,7 +85,8 @@
  					env.setValue(1);
  			}
  		}
 -		return env.getValue();
 +	
-+		// Custom by fissban
 +		return EngineModsManager.onStats(stat, _activeChar,env.getValue());
  	}
  	
@@ -450,23 +412,21 @@ Index: java/net/sf/l2j/gameserver/model/itemcontainer/Inventory.java
  /**
   * This class manages inventory
   * @author Advi
-@@ -391,6 +393,10 @@
+@@ -391,6 +393,9 @@
  					
  					listener.onUnequip(slot, old, (Playable) getOwner());
  				}
 +				
-+				// custom by fissban
 +				EngineModsManager.onUnequip(getOwner());
 +				
  				old.updateDatabase();
  			}
  			// Add new item in slot of paperdoll
-@@ -424,6 +430,10 @@
+@@ -424,6 +429,9 @@
  					
  					listener.onEquip(slot, item, (Playable) getOwner());
  				}
 +				
-+				// custom by fissban
 +				EngineModsManager.onEquip(getOwner());
 +				
  				item.updateDatabase();
@@ -485,22 +445,20 @@ Index: java/net/sf/l2j/gameserver/model/zone/L2ZoneType.java
  /**
   * Abstract base class for any zone type.
   */
-@@ -140,6 +142,9 @@
+@@ -140,6 +142,8 @@
  				
  				// Notify Zone implementation.
  				onEnter(character);
 +				
-+				// Custom by fissban
 +				EngineModsManager.onEnterZone(character, this);
  			}
  		}
  		else
-@@ -168,6 +173,9 @@
+@@ -168,6 +172,8 @@
  			
  			// Notify Zone implementation.
  			onExit(character);
 +			
-+			// Custom by fissban
 +			EngineModsManager.onExitZone(character, this);
  		}
  	}
@@ -551,11 +509,10 @@ Index: java/net/sf/l2j/gameserver/network/clientpackets/CharacterCreate.java
  @SuppressWarnings("unused")
  public final class CharacterCreate extends L2GameClientPacket
  {
-@@ -160,6 +162,9 @@
+@@ -160,6 +162,8 @@
  			}
  		}
  		
-+		// Custom by fissban
 +		EngineModsManager.onCreateCharacter(newChar);
 +		
  		newChar.setOnlineStatus(true, false);
@@ -574,11 +531,10 @@ Index: java/net/sf/l2j/gameserver/network/clientpackets/EnterWorld.java
  public class EnterWorld extends L2GameClientPacket
  {
  	private static final String LOAD_PLAYER_QUESTS = "SELECT name,var,value FROM character_quests WHERE charId=?";
-@@ -323,6 +325,9 @@
+@@ -323,6 +325,8 @@
  		if (!activeChar.isGM() && (!activeChar.isInSiege() || activeChar.getSiegeState() < 2) && activeChar.isInsideZone(ZoneId.SIEGE))
  			activeChar.teleToLocation(TeleportType.TOWN);
  		
-+		// custom by fissban
 +		EngineModsManager.onEnterWorld(activeChar);
 +		
  		activeChar.sendPacket(ActionFailed.STATIC_PACKET);
@@ -597,11 +553,10 @@ Index: java/net/sf/l2j/gameserver/network/clientpackets/Logout.java
  public final class Logout extends L2GameClientPacket
  {
  	@Override
-@@ -48,6 +50,12 @@
+@@ -48,6 +50,11 @@
  			return;
  		}
  		
-+		// custom by fissban
 +		if (EngineModsManager.onExitWorld(player))
 +		{
 +			player.sendPacket(ActionFailed.STATIC_PACKET);
@@ -638,7 +593,7 @@ Index: java/net/sf/l2j/gameserver/network/clientpackets/RequestBypassToServer.ja
  				activeChar.enterOlympiadObserverMode(arenaId);
  			}
 +			else if (_command.startsWith("Engine"))
-+				EngineModsManager.onEvent(activeChar, activeChar.getLastNpcTalk(),_command.replace("Engine ", ""));
++				EngineModsManager.onEvent(activeChar,_command.replace("Engine ", ""));
  		}
  		catch (Exception e)
  		{
@@ -655,11 +610,10 @@ Index: java/net/sf/l2j/gameserver/network/clientpackets/RequestEnchantItem.java
  public final class RequestEnchantItem extends AbstractEnchantPacket
  {
  	private int _objectId = 0;
-@@ -269,6 +271,9 @@
+@@ -269,6 +271,8 @@
  				}
  			}
  			
-+			// custom by fissban
 +			EngineModsManager.onEnchant(activeChar);
 +			
  			activeChar.sendPacket(new ItemList(activeChar, false));
@@ -678,11 +632,10 @@ Index: java/net/sf/l2j/gameserver/network/clientpackets/RequestRestart.java
  public final class RequestRestart extends L2GameClientPacket
  {
  	@Override
-@@ -24,6 +26,10 @@
+@@ -24,6 +26,9 @@
  		if (player == null)
  			return;
  		
-+		// custom by fissban
 +		if (EngineModsManager.onExitWorld(player))
 +			return;
 +		
@@ -748,11 +701,10 @@ Index: java/net/sf/l2j/gameserver/network/serverpackets/AbstractNpcInfo.java
  public abstract class AbstractNpcInfo extends L2GameServerPacket
  {
  	protected int _x, _y, _z, _heading;
-@@ -79,6 +81,11 @@
+@@ -79,6 +81,10 @@
  			else if (_npc.getTemplate().isUsingServerSideTitle())
  				_title = _npc.getTitle();
  			
-+			// custom by fissban
 +			String title = EngineModsManager.onSeeNpcTitle(cha.getObjectId());
 +			if (title != null)
 +				_title = title;
@@ -760,7 +712,7 @@ Index: java/net/sf/l2j/gameserver/network/serverpackets/AbstractNpcInfo.java
  			if (Config.SHOW_NPC_LVL && _npc instanceof Monster)
  				_title = "Lv " + _npc.getLevel() + (_npc.getTemplate().getAggroRange() > 0 ? "* " : " ") + _title;
  			
-@@ -151,7 +158,7 @@
+@@ -151,7 +157,7 @@
  			writeD(_allyCrest);
  			
  			writeC(_npc.isFlying() ? 2 : 0);
