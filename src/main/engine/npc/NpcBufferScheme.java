@@ -159,9 +159,9 @@ public class NpcBufferScheme extends AbstractMods
 			case "create":
 			{
 				// anti sql inject
-				String param = eventParam1.replaceAll("[ !" + "\"" + "#$%&'()*+,/:;<=>?@" + "\\[" + "\\\\" + "\\]" + "\\^" + "`{|}~]", ""); // JOJO
+				String name = eventParam1.replaceAll("[ !" + "\"" + "#$%&'()*+,/:;<=>?@" + "\\[" + "\\\\" + "\\]" + "\\^" + "`{|}~]", ""); // JOJO
 				
-				if (param.length() == 0 || param.equals("no_name"))
+				if (name.length() == 0 || name.equals("no_name"))
 				{
 					player.sendPacket(SystemMessageId.INCORRECT_NAME_TRY_AGAIN);
 					showText(player, "Info", "Please, enter the scheme name!", true, "Return", "main");
@@ -170,40 +170,59 @@ public class NpcBufferScheme extends AbstractMods
 				
 				// XXX INSERT INTO npcbuffer_scheme_list (player_id,scheme_name) VALUES (?,?)
 				// obtenemos el listado de schemes
-				String schemeNames = getValueDB(player.getObjectId(), "schemeName");
-				// aqgregamos el nuevo nombre del scheme
-				if (schemeNames == null)
+				String allSchemes = getValueDB(player.getObjectId(), "schemeName");
+				
+				// if first scheme create...init var
+				if (allSchemes == null)
 				{
-					schemeNames = "";
+					allSchemes = "";
 				}
-				schemeNames += param + ",";
+				else
+				{
+					// check if scheme name exist
+					for (String s : allSchemes.split(","))
+					{
+						if (s != null && s.equals(name))
+						{
+							player.sendPacket(SystemMessageId.INCORRECT_NAME_TRY_AGAIN);
+							showText(player, "Info", "The name you are trying to use is already in use!", true, "Return", "main");
+							return;
+						}
+					}
+				}
+				
+				allSchemes += name + ",";
 				
 				// salvamos el nuevo listado
-				setValueDB(player.getObjectId(), "schemeName", schemeNames);
+				setValueDB(player.getObjectId(), "schemeName", allSchemes);
 				
 				rebuildMainHtml(player);
 				return;
 			}
 			case "delete":
 			{
-				// TODO missing code
 				String schemeName = eventParam1;
 				// removemos la lista de buffs
 				removeValueDB(player.getObjectId(), schemeName);
 				// removemos el nombre del scheme del listado
 				String schemes = getValueDB(player.getObjectId(), "schemeName");
-				if (schemes.contains(schemeName + ","))
-				{
-					schemes = schemes.replace(schemeName + ",", "");
-				}
-				else
-				{
-					// TODO prevenimos para los q ya tienen mas de un scheme con el viejo sistema
-					schemes = schemes.replace(schemeName, "");
-				}
 				
-				// salvamos el nuevo listado de los nombres de los schemes
-				setValueDB(player.getObjectId(), "schemeName", schemes);
+				// prevent bypass
+				if (schemes != null)
+				{
+					if (schemes.contains(schemeName + ","))
+					{
+						schemes = schemes.replace(schemeName + ",", "");
+					}
+					else
+					{
+						// TODO prevenimos para los q ya tienen mas de un scheme con el viejo sistema
+						schemes = schemes.replace(schemeName, "");
+					}
+					
+					// salvamos el nuevo listado de los nombres de los schemes
+					setValueDB(player.getObjectId(), "schemeName", schemes);
+				}
 				
 				rebuildMainHtml(player);
 				return;
@@ -607,7 +626,6 @@ public class NpcBufferScheme extends AbstractMods
 		
 		if (checkTimeOut(player))
 		{
-			// Sacamos restriccion de vip
 			if (player.getLevel() < MIN_LEVEL)
 			{
 				showText(player, "Info", "Your level is too low!<br>You have to be at least level <font color=LEVEL>" + MIN_LEVEL + "</font>,<br>to use my services!", false, "Return", "main");
@@ -1151,6 +1169,11 @@ public class NpcBufferScheme extends AbstractMods
 				
 				for (BuffHolder bh : SchemeBuffData.getAllGeneralBuffs())
 				{
+					if (!isEnabled(id, level))
+					{
+						continue;
+					}
+					
 					if (bh.getId() == id && bh.getLevel() == level)
 					{
 						if (bh.getType() == BuffType.SONG || bh.getType() == BuffType.DANCE)
@@ -1187,19 +1210,19 @@ public class NpcBufferScheme extends AbstractMods
 		
 		String[] eventSplit = viewAllSchemeBuffsGetBuffCount(player, schemeName).split(" ");
 		
-		int TOTAL_BUFF = Integer.parseInt(eventSplit[0]);
-		int BUFF_COUNT = Integer.parseInt(eventSplit[1]);
-		int DANCE_SONG = Integer.parseInt(eventSplit[2]);
+		int buffsTotal = Integer.parseInt(eventSplit[0]);
+		int buffsCount = Integer.parseInt(eventSplit[1]);
+		int daceSong = Integer.parseInt(eventSplit[2]);
 		
 		List<BuffHolder> buffs = new ArrayList<>();
 		
 		if (action.equals("add"))
 		{
-			hb.append("You can add <font color=LEVEL>", MAX_SCHEME_BUFFS - BUFF_COUNT, "</font> Buffs and <font color=LEVEL>", MAX_SCHEME_DANCES - DANCE_SONG, "</font> Dances more!");
+			hb.append("You can add <font color=LEVEL>", MAX_SCHEME_BUFFS - buffsCount, "</font> Buffs and <font color=LEVEL>", MAX_SCHEME_DANCES - daceSong, "</font> Dances more!");
 			
 			for (BuffHolder bh : SchemeBuffData.getAllGeneralBuffs())
 			{
-				if (DANCE_SONG > MAX_SCHEME_DANCES)
+				if (daceSong > MAX_SCHEME_DANCES)
 				{
 					if (bh.getType() == BuffType.DANCE || bh.getType() == BuffType.SONG)
 					{
@@ -1207,7 +1230,7 @@ public class NpcBufferScheme extends AbstractMods
 					}
 				}
 				
-				if (BUFF_COUNT > MAX_SCHEME_BUFFS)
+				if (buffsCount > MAX_SCHEME_BUFFS)
 				{
 					if (bh.getType() != BuffType.DANCE && bh.getType() != BuffType.SONG)
 					{
@@ -1220,7 +1243,7 @@ public class NpcBufferScheme extends AbstractMods
 		}
 		else if (action.equals("remove"))
 		{
-			hb.append("You have <font color=LEVEL>", BUFF_COUNT, "</font> Buffs and <font color=LEVEL>", DANCE_SONG, "</font> Dances");
+			hb.append("You have <font color=LEVEL>", buffsCount, "</font> Buffs and <font color=LEVEL>", daceSong, "</font> Dances");
 			
 			String buffList = getValueDB(player.getObjectId(), schemeName);
 			if (buffList == null)
@@ -1309,7 +1332,7 @@ public class NpcBufferScheme extends AbstractMods
 					hb.append("<tr>");
 					hb.append("<td width=35>", getSkillIconHtml(id, level), "</td>");
 					hb.append("<td fixwidth=170>", name, "</td>");
-					hb.append("<td><button value=\"Add\" action=\"bypass -h Engine NpcBufferScheme add_buff ", schemeName, "_", id, "_", level, " ", page, " ", TOTAL_BUFF, "\" width=75 height=21 back=", L2UI_CH3.Btn1_normalOn, " fore=", L2UI_CH3.Btn1_normal, "></td>");
+					hb.append("<td><button value=\"Add\" action=\"bypass -h Engine NpcBufferScheme add_buff ", schemeName, "_", id, "_", level, " ", page, " ", buffsTotal, "\" width=75 height=21 back=", L2UI_CH3.Btn1_normalOn, " fore=", L2UI_CH3.Btn1_normal, "></td>");
 					hb.append("</tr>");
 					hb.append("</table>");
 					k += 1;
@@ -1328,7 +1351,7 @@ public class NpcBufferScheme extends AbstractMods
 				hb.append("<tr>");
 				hb.append("<td width=35>", getSkillIconHtml(id, level), "</td>");
 				hb.append("<td fixwidth=170>", name, "</td>");
-				hb.append("<td><button value=\"Remove\" action=\"bypass -h Engine NpcBufferScheme remove_buff ", schemeName, "_", id, "_", level, " ", page, " ", TOTAL_BUFF, "\" width=75 height=21 back=", L2UI_CH3.Btn1_normalOn, " fore=", L2UI_CH3.Btn1_normal, "></td>");
+				hb.append("<td><button value=\"Remove\" action=\"bypass -h Engine NpcBufferScheme remove_buff ", schemeName, "_", id, "_", level, " ", page, " ", buffsTotal, "\" width=75 height=21 back=", L2UI_CH3.Btn1_normalOn, " fore=", L2UI_CH3.Btn1_normal, "></td>");
 				hb.append("</tr>");
 				hb.append("</table>");
 				k += 1;
